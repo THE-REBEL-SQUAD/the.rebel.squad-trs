@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="The Rebel Squad - TRS | Video Downloader" />
+<meta name="keywords" content="The Rebel Squad, TRS, Video Downloader, Cyber Security" />
+<meta name="author" content="The Rebel Squad" />
+
+<title>Video Downloader - The Rebel Squad</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .downloads .card {
+    background: #1a1a1a;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.2);
+    transition: transform 0.3s ease;
+  }
+  .downloads .card:hover { transform: translateY(-5px); }
+  .downloads .card h3 { color: #ffdd00; margin-bottom: 1rem; }
+  .downloads .card p { color: #ccc; margin-bottom: 1rem; }
+  .downloads .card a {
+    display: inline-block;
+    background: #ffdd00;
+    color: #111;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+  .downloads .card a:hover { background: #ffaa00; color: #000; }
+</style>
+</head>
+<body class="bg-black text-white font-sans">
+
+<!-- Navigation -->
+<header class="bg-black/80 fixed w-full z-50 shadow-md border-b border-yellow-500">
+  <nav class="container mx-auto flex justify-between items-center p-4">
+    <div class="flex items-center space-x-3">
+      <img src="https://i.postimg.cc/jdKJ6RTW/1758183930168.png" alt="TRS Logo" class="w-10 h-10" />
+      <span class="text-yellow-400 font-bold text-lg">The Rebel Squad</span>
+    </div>
+    <ul class="hidden md:flex space-x-6">
+      <li><a href="index.html" class="hover:text-yellow-400">Home</a></li>
+      <li><a href="#downloads" class="hover:text-yellow-400">Downloads</a></li>
+      <li><a href="about.html" class="hover:text-yellow-400">About</a></li>
+      <li><a href="mission.html" class="hover:text-yellow-400">Mission</a></li>
+      <li><a href="contact.html" class="hover:text-yellow-400">Contact</a></li>
+    </ul>
+    <button class="md:hidden text-yellow-400" id="menu-btn">☰</button>
+  </nav>
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden bg-black border-t border-yellow-500 md:hidden">
+    <ul class="flex flex-col text-center">
+      <li><a href="index.html" class="block py-2 hover:text-yellow-400">Home</a></li>
+      <li><a href="#downloads" class="block py-2 hover:text-yellow-400">Downloads</a></li>
+      <li><a href="about.html" class="block py-2 hover:text-yellow-400">About</a></li>
+      <li><a href="mission.html" class="block py-2 hover:text-yellow-400">Mission</a></li>
+      <li><a href="contact.html" class="block py-2 hover:text-yellow-400">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="h-64 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black via-gray-900 to-black px-4 mt-20">
+  <h1 class="text-4xl md:text-5xl font-bold text-yellow-400">Video Downloader</h1>
+  <p class="mt-2 text-gray-300">Paste a video URL from Facebook, TikTok, or Instagram to download.</p>
+</section>
+
+<!-- Downloads / Video Downloader Section -->
+<section id="downloads" class="downloads py-20 px-4 text-center">
+  <h2 class="text-3xl font-bold text-yellow-400 mb-10">Download Videos</h2>
+  
+  <!-- Video Form -->
+  <form id="video-form" class="mb-10 flex flex-col md:flex-row justify-center items-center gap-2">
+    <input type="url" id="video-url" placeholder="Paste video URL here" class="p-3 rounded text-black w-full md:w-1/2" required>
+    <button type="submit" class="bg-yellow-400 text-black font-bold px-6 py-2 rounded">Download</button>
+  </form>
+  
+  <!-- Download Links -->
+  <div id="video-links" class="flex flex-col items-center space-y-4"></div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-black py-6 text-center border-t border-yellow-500">
+  <p class="text-gray-500 text-sm">© 2025 The Rebel Squad - All Rights Reserved.</p>
+</footer>
+
+<script>
+  // Mobile Menu Toggle
+  const btn = document.getElementById("menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  btn.addEventListener("click", () => { menu.classList.toggle("hidden"); });
+
+  // Video Downloader Logic
+  const form = document.getElementById("video-form");
+  const videoLinks = document.getElementById("video-links");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const url = document.getElementById("video-url").value.trim();
+    if (!url) return alert("Please enter a video URL");
+
+    // Clear previous results
+    videoLinks.innerHTML = `<p class="text-gray-300">Fetching download link...</p>`;
+
+    try {
+      // Replace with your actual API endpoint
+      const response = await fetch(`https://nayan-video-downloader.vercel.app/alldown?url=${encodeURIComponent(url)}`);
+      const data = await response.json();
+
+      if (data.success && data.download) {
+        videoLinks.innerHTML = `
+          <div class="card">
+            <h3>Download Ready</h3>
+            <p>${data.title || "Video file"}</p>
+            <a href="${data.download}" target="_blank">Download Video</a>
+          </div>
+        `;
+      } else {
+        videoLinks.innerHTML = `<p class="text-red-500">Failed to fetch video link. Make sure the URL is valid.</p>`;
+      }
+    } catch (err) {
+      console.error(err);
+      videoLinks.innerHTML = `<p class="text-red-500">Error fetching video. Try again later.</p>`;
+    }
+  });
+</script>
+
+</body>
+</html>
