@@ -58,8 +58,8 @@
 
 <!-- Hero Section -->
 <section class="h-72 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black via-gray-900 to-black px-4 pt-24">
-   <img src="https://i.postimg.cc/jdKJ6RTW/1758183930168.png" alt="TRS Logo" class="w-10 h-10">
-  <h1 class="text-4xl md:text-5xl font-bold text-yellow-400">TRS - Video Downloader</h1>
+   <img src="https://i.postimg.cc/jdKJ6RTW/1758183930168.png" alt="TRS Logo" class="w-40 h-40">
+  <h3 class="text-4xl md:text-5xl font-bold text-yellow-400">TRS - Video Downloader</h3>
   <p class="mt-3 text-gray-300">Paste a video URL from TikTok, Facebook, Instagram, or YouTube to download.</p>
 </section>
 
@@ -89,6 +89,9 @@
 const form = document.getElementById("video-form");
 const videoLinks = document.getElementById("video-links");
 
+// আমার fallback thumbnail
+const fallbackThumbnail = "https://i.postimg.cc/FHdTnVgj/Not-Available.jpg";
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const url = document.getElementById("video-url").value.trim();
@@ -101,26 +104,33 @@ form.addEventListener("submit", async (e) => {
     const res = await fetch(apiUrl);
     const data = await res.json();
 
-    if(data.success && data.result && data.result.data){
-      const video = data.result.data;
+    if (data.success && data.result) {
+      let thumb = data.thumbnail;
+
+      // যদি thumbnail খালি হয় অথবা নায়ানের ডিফল্ট লিংক আসে → আমার fallback দেখাবে
+      if (!thumb || thumb.includes("Nayan-Not-Available.jpg")) {
+        thumb = fallbackThumbnail;
+      }
+
       videoLinks.innerHTML = `
         <div class="card">
-          <h3>${video.title || 'Video'}</h3>
-          ${video.thumbnail ? `<img src="${video.thumbnail}" alt="Thumbnail">` : ''}
-          ${video.low ? `<a href="${video.low}" target="_blank" download>Download Low Quality</a>` : ''}
-          ${video.high ? `<a href="${video.high}" target="_blank" download>Download High Quality</a>` : ''}
+          <h3>${data.title || 'Video'}</h3>
+          <img src="${thumb}" alt="Thumbnail">
+          ${data.result.low ? `<a href="${data.result.low}" target="_blank" download>Download Low Quality</a>` : ''}
+          ${data.result.high ? `<a href="${data.result.high}" target="_blank" download>Download High Quality</a>` : ''}
         </div>
       `;
     } else {
       videoLinks.innerHTML = `<p class="text-red-500 col-span-full">Failed to fetch video. Make sure the URL is correct.</p>`;
     }
 
-  } catch(err){
+  } catch (err) {
     console.error(err);
     videoLinks.innerHTML = `<p class="text-red-500 col-span-full">Error fetching video. Try again later.</p>`;
   }
 });
 </script>
+
 
 </body>
 </html>
