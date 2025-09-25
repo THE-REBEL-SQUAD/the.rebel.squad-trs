@@ -6,65 +6,23 @@
 <title>Video Downloader - TRS</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  body { background: #000; color: #fff; font-family: sans-serif; }
-  .card {
-    background: #1a1a1a;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255,255,0,0.2);
-    transition: transform 0.3s;
-    width: 100%;
-    max-width: 500px;
-    text-align: left;
-  }
-  .card:hover { transform: translateY(-5px); }
-  .card h3 { color: #ffdd00; font-size: 1.25rem; margin-bottom: 0.5rem; }
-  .card p { color: #ccc; font-size: 0.95rem; margin-bottom: 0.5rem; }
-  .card a {
-    display: inline-block;
-    background: #ffdd00;
-    color: #111;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-weight: bold;
-    margin-top: 0.25rem;
-    text-decoration: none;
-    transition: 0.3s;
-  }
-  .card a:hover { background: #ffaa00; color: #000; }
-  .card img { border-radius: 5px; margin-bottom: 1rem; width: 100%; }
+body { background: #000; color: #fff; font-family: sans-serif; }
+.card { background: #1a1a1a; padding: 1.5rem; border-radius: 10px; width: 100%; max-width: 500px; margin-bottom: 1rem; }
+.card a { display: inline-block; background: #ffdd00; color: #111; padding: 0.5rem 1rem; border-radius: 5px; font-weight: bold; text-decoration: none; margin-top: 0.5rem; }
+.card a:hover { background: #ffaa00; color: #000; }
 </style>
 </head>
-<body>
+<body class="flex flex-col items-center py-10">
 
-<header class="bg-black/80 fixed w-full z-50 shadow-md border-b border-yellow-500">
-  <nav class="container mx-auto flex justify-between items-center p-4">
-    <div class="flex items-center space-x-3">
-      <img src="https://i.postimg.cc/jdKJ6RTW/1758183930168.png" alt="TRS Logo" class="w-10 h-10">
-      <span class="text-yellow-400 font-bold text-lg">The Rebel Squad</span>
-    </div>
-  </nav>
-</header>
+<h1 class="text-yellow-400 text-4xl font-bold mb-4">Video Downloader</h1>
+<p class="text-gray-300 mb-6">Paste a TikTok, Facebook, or Instagram video URL below.</p>
 
-<section class="h-64 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black via-gray-900 to-black px-4 mt-20">
-  <h1 class="text-4xl md:text-5xl font-bold text-yellow-400">Video Downloader</h1>
-  <p class="mt-2 text-gray-300">Paste a video URL from TikTok, Facebook, or Instagram to download.</p>
-</section>
+<form id="video-form" class="flex flex-col md:flex-row gap-2 mb-6">
+  <input type="url" id="video-url" placeholder="Paste video URL" class="p-3 rounded text-black w-full md:w-96" required>
+  <button type="submit" class="bg-yellow-400 text-black px-6 py-2 rounded font-bold">Download</button>
+</form>
 
-<section class="downloads py-20 px-4 text-center">
-  <h2 class="text-3xl font-bold text-yellow-400 mb-10">Download Videos</h2>
-
-  <form id="video-form" class="mb-10 flex flex-col md:flex-row justify-center items-center gap-2">
-    <input type="url" id="video-url" placeholder="Paste video URL here" class="p-3 rounded text-black w-full md:w-1/2" required>
-    <button type="submit" class="bg-yellow-400 text-black font-bold px-6 py-2 rounded">Download</button>
-  </form>
-
-  <div id="video-links" class="grid grid-cols-1 md:grid-cols-2 gap-6 justify-items-center"></div>
-</section>
-
-<footer class="bg-black py-6 text-center border-t border-yellow-500">
-  <p class="text-gray-500 text-sm">© 2025 The Rebel Squad - All Rights Reserved.</p>
-</footer>
+<div id="video-links" class="flex flex-col items-center w-full max-w-md"></div>
 
 <script>
 const form = document.getElementById("video-form");
@@ -75,11 +33,10 @@ form.addEventListener("submit", async (e) => {
   const url = document.getElementById("video-url").value.trim();
   if (!url) return alert("Please enter a video URL");
 
-  videoLinks.innerHTML = `<p class="text-gray-300 col-span-full">Fetching download links...</p>`;
+  videoLinks.innerHTML = `<p class="text-gray-300">Fetching download links...</p>`;
 
   try {
-    const apiUrl = `/api/media?url=${encodeURIComponent(url)}`;
-    const res = await fetch(apiUrl);
+    const res = await fetch(`/api/media?url=${encodeURIComponent(url)}`);
     const data = await res.json();
 
     if(data.success && data.result){
@@ -87,28 +44,31 @@ form.addEventListener("submit", async (e) => {
       videoLinks.innerHTML = '';
 
       if(v.no_watermark_video){
-        videoLinks.innerHTML += `
-          <div class="card">
-            <h3>${v.title || 'Video (No Watermark)'}</h3>
-            ${v.cover ? `<img src="${v.cover}" alt="Thumbnail">` : ''}
-            <a href="${v.no_watermark_video}" download>Download Video</a>
-            ${v.author ? `<p class="mt-2 text-gray-400 text-sm">Author: ${v.author.nickname}</p>` : ''}
-          </div>`;
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+          <h3>${v.title || 'Video (No Watermark)'}</h3>
+          ${v.cover ? `<img src="${v.cover}" alt="Thumbnail" class="mb-2 rounded w-full">` : ''}
+          <a href="${v.no_watermark_video}" download>Download Video</a>
+          ${v.author ? `<p class="mt-2 text-gray-400 text-sm">Author: ${v.author.nickname}</p>` : ''}
+        `;
+        videoLinks.appendChild(div);
       }
 
       if(v.audio){
-        videoLinks.innerHTML += `
-          <div class="card">
-            <h3>Audio</h3>
-            <a href="${v.audio}" download>Download Audio</a>
-          </div>`;
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `<h3>Audio</h3><a href="${v.audio}" download>Download Audio</a>`;
+        videoLinks.appendChild(div);
       }
+
     } else {
-      videoLinks.innerHTML = `<p class="text-red-500 col-span-full">Failed to fetch video link</p>`;
+      videoLinks.innerHTML = `<p class="text-red-500">Failed to fetch video link.</p>`;
     }
+
   } catch(err){
     console.error(err);
-    videoLinks.innerHTML = `<p class="text-red-500 col-span-full">Error fetching video. Try again later.</p>`;
+    videoLinks.innerHTML = `<p class="text-red-500">Error fetching video. Try again later.</p>`;
   }
 });
 </script>
