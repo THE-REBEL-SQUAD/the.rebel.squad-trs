@@ -1,5 +1,5 @@
 {
-  "name": "the.rebel.squad-trs",
+  "name": "rebel-downloader",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -11,5 +11,3 @@
     "axios": "^1.6.0"
   }
 }
-s
-
