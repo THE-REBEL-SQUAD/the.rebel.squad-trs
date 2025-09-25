@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Rebel Squad - Chatbot">
+  <meta name="keywords" content="The Rebel Squad, Rebel AI, Chatbot">
+  <meta name="author" content="The Rebel Squad">
+  <title>Rebel Chatbot - The Rebel Squad</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #000; color: #fff; font-family: sans-serif; }
+    .card { background: #1a1a1a; padding: 1.5rem; border-radius: 10px; box-shadow: 0 0 15px rgba(255, 255, 0, 0.2); transition: transform 0.3s; width: 100%; max-width: 600px; margin: auto; }
+    .card:hover { transform: translateY(-5px); }
+    .msg { margin: 10px 0; padding: 12px; border-radius: 8px; max-width: 80%; word-wrap: break-word; font-size: 0.95rem; line-height: 1.4; animation: fadeIn 0.3s ease-in-out; }
+    .user { background: #003d2b; align-self: flex-end; border: 1px solid #ffdd00; }
+    .bot { background: #1a1a1a; align-self: flex-start; border: 1px solid #ffaa00; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="font-sans flex flex-col min-h-screen">
+
+<!-- Navbar -->
+<header class="bg-black/90 fixed w-full z-50 shadow-md border-b border-yellow-500">
+  <nav class="container mx-auto flex justify-between items-center p-4">
+    <div class="flex items-center space-x-3">
+      <img src="https://i.postimg.cc/jdKJ6RTW/1758183930168.png" alt="TRS Logo" class="w-10 h-10">
+      <span class="text-yellow-400 font-bold text-lg">The Rebel Squad</span>
+    </div>
+    <a href="https://the-rebel-squad-trs.vercel.app/" 
+       class="bg-yellow-400 text-black font-bold px-4 py-1 rounded hover:bg-yellow-300">
+      ← Home
+    </a>
+  </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="h-64 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black via-gray-900 to-black px-4 pt-24">
+  <h1 class="text-4xl md:text-5xl font-bold text-yellow-400">⚡ Rebel Chatbot ⚡</h1>
+  <p class="mt-3 text-gray-300">Talk with Rebel AI powered by our API</p>
+</section>
+
+<!-- Chat Section -->
+<section class="flex-1 py-16 px-4 flex flex-col items-center justify-center">
+  <div class="card flex flex-col h-[500px]">
+    <div id="chat-box" class="flex-1 overflow-y-auto mb-4 flex flex-col"></div>
+    <div class="flex">
+      <input id="input" type="text" placeholder="Type your message..."
+        class="flex-1 p-2 rounded-l-md border border-yellow-400 bg-black text-yellow-400 outline-none">
+      <button id="send" class="bg-yellow-400 text-black font-bold px-4 py-2 rounded-r-md hover:bg-yellow-300">
+        Send
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-black py-6 text-center border-t border-yellow-500">
+  <p class="text-gray-500 text-sm">© 2025 The Rebel Squad - All Rights Reserved.</p>
+</footer>
+
+<script>
+  const chatBox = document.getElementById("chat-box");
+  const input = document.getElementById("input");
+  const send = document.getElementById("send");
+
+  function addMessage(text, sender) {
+    const div = document.createElement("div");
+    div.classList.add("msg", sender);
+    div.innerText = text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const message = input.value.trim();
+    if (!message) return;
+    addMessage(message, "user");
+    input.value = "";
+
+    try {
+      const res = await fetch(`https://rebel-api-server-ld11.onrender.com/api/ask/${encodeURIComponent(message)}`);
+      const data = await res.json();
+      addMessage(data.reply || "No reply found.", "bot");
+    } catch (err) {
+      addMessage("⚠️ Error: " + err.message, "bot");
+    }
+  }
+
+  send.addEventListener("click", sendMessage);
+  input.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+</script>
+
+</body>
+</html>
