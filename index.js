@@ -40,4 +40,14 @@ app.get("/downloader", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "downloader.html"));
 });
 
+// rebelchat bot.html
+app.get("/rebel_bot", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "rebel_bot.html"));
+});
+
+// rebelchat bot.html
+app.get("/media_to_link", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "media_to_link.html"));
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
