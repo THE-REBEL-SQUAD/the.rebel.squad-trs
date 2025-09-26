@@ -50,4 +50,9 @@ app.get("/media_to_link", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "media_to_link.html"));
 });
 
+// rebelchat bot.html
+app.get("/locatoin_tracker", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "locatoin_tracker.html"));
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
