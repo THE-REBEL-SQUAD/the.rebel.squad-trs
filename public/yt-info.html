@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Info Grabber - The Rebel Squad</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background: #000; color: #fff; font-family: 'Courier New', monospace; margin:0; padding:0; }
+  header { background: #111; border-bottom: 2px solid #ffdd00; padding: 10px 20px; display:flex; justify-content:space-between; align-items:center; }
+  header img { width:40px; height:40px; }
+  header a { color:#000; background:#ffdd00; padding:5px 12px; border-radius:6px; font-weight:bold; text-decoration:none; }
+  section { padding: 20px; max-width:700px; margin:20px auto; }
+  .card { background:#111; padding:20px; border-radius:12px; box-shadow:0 0 20px rgba(255,221,0,0.25); }
+  .card input, .card button { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:none; font-family: monospace; }
+  .card input { background:#000; color:#fff; border:1px solid rgba(255,221,0,0.3); }
+  .card input::placeholder { color:#555; }
+  .card button { background:linear-gradient(90deg,#ffdd00,#ffaa00); color:#111; font-weight:bold; cursor:pointer; box-shadow:0 0 10px rgba(255,221,0,0.25); transition:0.2s; }
+  .card button:hover { transform:scale(1.03); }
+  #result { margin-top:15px; background:#1e1e1e; padding:15px; border-radius:8px; font-size:0.95rem; overflow-wrap:break-word; }
+  .yt-thumb { margin:10px 0; border-radius:10px; max-width:100%; }
+  .copy-btn { background:#ffdd00;color:#111;padding:4px 8px;border-radius:5px;margin:4px 2px; cursor:pointer; font-size:0.85rem; border:none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="flex items-center gap-3">
+    <img src="https://i.postimg.cc/jdKJ6RTW/1758183930168.png" alt="TRS Logo">
+    <span style="color:#ffdd00; font-weight:bold;">The Rebel Squad</span>
+  </div>
+  <a href="/">← Home</a>
+</header>
+
+<section>
+  <div class="card">
+    <h3 style="color:#ffdd00; font-weight:bold;">Enter YouTube Link</h3>
+    <input type="text" id="ytInput" placeholder="Paste YouTube video URL...">
+    <button id="fetchBtn">Get Info</button>
+    <div id="result">Result will appear here...</div>
+  </div>
+</section>
+
+<footer style="text-align:center; padding:10px; border-top:2px solid #ffdd00; color:#aaa;">© 2025 The Rebel Squad</footer>
+
+<script>
+const btn = document.getElementById("fetchBtn");
+const input = document.getElementById("ytInput");
+const result = document.getElementById("result");
+
+btn.addEventListener("click", async () => {
+  result.innerHTML = "⏳ Fetching...";
+  const url = input.value.trim();
+  if(!url) return result.innerHTML = "<span style='color:red;'>⚠️ Please enter a YouTube link!</span>";
+
+  try {
+    const res = await fetch(`https://rebel-api-server-ld11.onrender.com/api/ytdown?url=${encodeURIComponent(url)}`);
+    if(!res.ok) throw new Error("API fetch failed");
+    const data = await res.json();
+
+    if(!data.status) throw new Error("Video info not found");
+
+    const info = data.data;
+
+    result.innerHTML = `
+      <b>Title:</b> ${info.title} 
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('${info.title.replace(/'/g,"\\'")}')">Copy</button><br><br>
+      
+      <b>Channel:</b> ${info.channel}<br><br>
+      
+      <b>Thumbnail:</b><br>
+      <img src="${info.thumb}" class="yt-thumb"><br>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('${info.thumb}')">Copy Thumbnail URL</button><br><br>
+      
+      <b>Video 360p:</b> <a href="${info.video}" target="_blank">${info.video}</a>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('${info.video}')">Copy</button><br><br>
+      
+      <b>Video 720p:</b> <a href="${info.video_hd}" target="_blank">${info.video_hd}</a>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('${info.video_hd}')">Copy</button><br><br>
+      
+      <b>Audio:</b> <a href="${info.audio}" target="_blank">${info.audio}</a>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('${info.audio}')">Copy</button><br><br>
+      
+      <b>Description:</b><br>
+      <textarea readonly style="width:100%; height:200px; background:#000; color:#fff; border:1px solid #ffdd00; padding:8px; border-radius:8px;">${info.desc}</textarea>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText(\`${info.desc}\`)">Copy Description</button><br><br>
+      
+      <b>Developer:</b> ${data.developer} | <a href="${data.devfb}" target="_blank" style="color:#ffdd00">FB</a> | <a href="${data.devwp}" target="_blank" style="color:#ffdd00">WA</a>
+      <br><small style="color:#aaa">Source: ${data.source}</small>
+    `;
+  } catch(err) {
+    result.innerHTML = `<span style="color:red;">❌ API Error: ${err.message}</span>`;
+  }
+});
+</script>
+
+</body>
+</html>
