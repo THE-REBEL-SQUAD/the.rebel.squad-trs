@@ -50,6 +50,28 @@ app.get("/media_to_link", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "media_to_link.html"));
 });
 
+
+// rebelchat bot.html
+app.get("/yt-info", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "yt-info.html"));
+});
+
+
+// rebelchat bot.html
+app.get("/url-shortner", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "url-shortner.html"));
+});
+
+
+// rebelchat bot.html
+app.get("/github-info", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "github-info.html"));
+});
+
+
+
+
+
 // rebelchat bot.html
 app.get("/locatoin_tracker", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "locatoin_tracker.html"));
