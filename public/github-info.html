@@ -1,260 +1,149 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GitHub Image Info - The Rebel Squad</title>
-  <style>
-    :root {
-      --bg:#000;
-      --card:#111;
-      --muted:#999;
-      --accent:#ffdd00;
-      --accent2:#ffaa00;
-    }
-    *{box-sizing:border-box}
-    body {
-      font-family: 'Courier New', monospace;
-      background: var(--bg);
-      margin:0;
-      color:#fefce8;
-    }
-    header {
-      background: rgba(0,0,0,0.9);
-      position: fixed;
-      width: 100%;
-      z-index: 50;
-      border-bottom: 1px solid var(--accent);
-      box-shadow: 0 0 10px rgba(255,221,0,0.2);
-    }
-    nav { max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; padding:14px; }
-    nav img { width:40px; height:40px; }
-    nav span { color:var(--accent); font-weight:bold; font-size:18px; }
-    nav a { background: var(--accent); color:#111; font-weight:bold; padding:6px 14px; border-radius:6px; text-decoration:none; }
-    nav a:hover { background: #ffea55; }
-
-    section.hero {
-      height:240px;
-      background: linear-gradient(to bottom,#000,#111,#000);
-      text-align:center;
-      padding-top:100px;
-    }
-    section.hero h1 { font-size:32px; color:var(--accent); font-weight:bold; }
-    section.hero p { margin-top:10px; color:#bbb; }
-
-    .container{max-width:900px;margin:0 auto;padding:40px 20px}
-    .card {
-      background: var(--card);
-      border-radius: 14px;
-      padding: 22px;
-      box-shadow: 0 0 25px rgba(255,221,0,0.15);
-      border:1px solid rgba(255,221,0,0.2);
-    }
-    h2 {
-      font-size:22px;
-      margin:0 0 10px;
-      background: linear-gradient(90deg,var(--accent),var(--accent2));
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      font-weight:bold;
-    }
-    p.lead {margin:0 0 16px;color:var(--muted)}
-
-    form { display:flex;gap:10px;flex-wrap:wrap; margin-bottom:14px; }
-    input[type=text], input[type=password] {
-      flex:1;
-      padding:10px 12px;
-      border:1px solid rgba(255,221,0,0.2);
-      border-radius:8px;
-      background:#000;
-      color:#fffbeb;
-    }
-    input::placeholder { color:#555; }
-    button {
-      background: linear-gradient(90deg,var(--accent),var(--accent2));
-      color:#111;
-      border:none;
-      padding:10px 14px;
-      border-radius:8px;
-      cursor:pointer;
-      font-weight:600;
-      transition:0.2s;
-      box-shadow:0 0 10px rgba(255,221,0,0.25);
-    }
-    button:hover{transform:scale(1.05)}
-    .grid{display:grid;gap:14px}
-    @media(min-width:720px){.grid-cols-3{grid-template-columns:160px 1fr 1fr}}
-
-    .avatar{
-      width:160px;height:160px;
-      border-radius:12px;
-      object-fit:cover;
-      background:#000;
-      border:2px solid var(--accent);
-      box-shadow:0 0 12px rgba(255,221,0,0.4);
-    }
-    .muted{color:var(--muted);font-size:13px}
-    .stat{
-      background:#000;
-      padding:10px;
-      border-radius:8px;
-      min-width:110px;
-      border:1px solid rgba(255,221,0,0.25);
-      box-shadow: inset 0 0 8px rgba(255,221,0,0.1);
-    }
-    .error{background:#331111;border:1px solid #f87171;color:#fca5a5;padding:10px;border-radius:8px}
-    .success{background:#1a2e1a;border:1px solid #bbf7d0;color:#4ade80;padding:10px;border-radius:8px}
-    .mono{font-family: monospace;word-break:break-all}
-
-    footer {
-      background:#000;
-      border-top:1px solid var(--accent);
-      padding:16px;
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
-    }
-    footer span{color:var(--accent)}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Rebel Squad - GitHub Info">
+<meta name="keywords" content="The Rebel Squad, GitHub, Profile Lookup, Avatar Info">
+<meta name="author" content="The Rebel Squad">
+<title>GitHub Info - The Rebel Squad</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background: #000; color: #fff; font-family: sans-serif; }
+  .card {
+    background: #1a1a1a;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255, 221, 0, 0.25);
+    transition: transform 0.3s;
+    width: 100%;
+    max-width: 650px;
+    margin: auto;
+    text-align: center;
+  }
+  .card:hover { transform: translateY(-5px); }
+  .card h3 { color: #ffdd00; font-size: 1.5rem; margin-bottom: 0.8rem; }
+  .card img {
+    border-radius: 50%;
+    margin: 1rem auto;
+    width: 160px;
+    height: 160px;
+    border: 3px solid #ffdd00;
+    object-fit: cover;
+  }
+  .info {
+    margin-top: 1.5rem;
+    text-align: left;
+    background: #111;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #ffdd00;
+  }
+  .info p { margin: 6px 0; line-height: 1.5; }
+  .highlight { color:#ffdd00; font-weight:600; }
+</style>
 </head>
-<body>
-<header>
-  <nav>
-    <div style="display:flex;align-items:center;gap:10px">
-      <img src="https://i.postimg.cc/jdKJ6RTW/1758183930168.png" alt="TRS Logo">
-      <span>The Rebel Squad</span>
+<body class="font-sans">
+
+<!-- Navbar -->
+<header class="bg-black/90 fixed w-full z-50 shadow-md border-b border-yellow-500">
+  <nav class="container mx-auto flex justify-between items-center p-4">
+    <div class="flex items-center space-x-3">
+      <img src="https://i.postimg.cc/jdKJ6RTW/1758183930168.png" alt="TRS Logo" class="w-10 h-10">
+      <span class="text-yellow-400 font-bold text-lg">The Rebel Squad</span>
     </div>
-    <a href="https://the-rebel-squad-trs.vercel.app/">← Home</a>
+    <a href="https://the-rebel-squad-trs.vercel.app/" 
+       class="bg-yellow-400 text-black font-bold px-4 py-1 rounded hover:bg-yellow-300">
+      ← Home
+    </a>
   </nav>
 </header>
 
-<section class="hero">
-  <h1>⚡ TRS - GitHub Info ⚡</h1>
-  <p>Enter a GitHub username or profile link to fetch details</p>
+<!-- Hero Section -->
+<section class="h-72 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black via-gray-900 to-black px-4 pt-24">
+  <h3 class="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-yellow-400 text-center whitespace-nowrap">
+    TRS - GitHub Info
+  </h3>
+  <p class="mt-3 text-gray-300">Enter a GitHub username or profile link to fetch details</p>
 </section>
 
-<div class="container">
-  <div class="card">
-    <h2>GitHub Profile Lookup</h2>
-    <p class="lead">Get public profile, avatar and account info instantly.</p>
+<!-- Lookup Section -->
+<section class="py-20 px-4 flex flex-col items-center justify-center">
+  <h2 class="text-3xl font-bold text-yellow-400 mb-8">GitHub Profile Lookup</h2>
 
-    <form id="fetchForm">
-      <input id="inputUser" type="text" placeholder="github.com/username or username" autocomplete="off" />
-      <input id="token" type="password" placeholder="Optional: Token (avoid rate limits)" style="max-width:340px" />
-      <button id="go">Fetch</button>
-    </form>
+  <form id="fetchForm" class="flex flex-col md:flex-row justify-center items-center gap-3 w-full max-w-2xl">
+    <input id="inputUser" type="text" placeholder="github.com/username or username" 
+           class="p-3 rounded text-black w-full flex-1" required>
+    <button type="submit" 
+            class="bg-yellow-400 text-black font-bold px-6 py-2 rounded hover:bg-yellow-300">
+      Fetch
+    </button>
+  </form>
 
-    <div id="messages" style="margin-top:12px"></div>
-
-    <div id="result" class="grid" style="margin-top:14px;display:none">
-      <div><img id="avatarImg" class="avatar" src="" alt="avatar" /></div>
-      <div style="grid-column:2 / span 2">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-          <div>
-            <div id="name" style="font-weight:600;font-size:16px"></div>
-            <div class="muted" id="login"></div>
-            <div id="bio" style="margin-top:8px"></div>
-          </div>
-          <div style="text-align:right">
-            <div class="muted">Public repos</div>
-            <div style="font-weight:600" id="repos">0</div>
-          </div>
-        </div>
-        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-          <div class="stat"><div class="muted">Followers</div><div id="followers" style="font-weight:600">0</div></div>
-          <div class="stat"><div class="muted">Following</div><div id="following" style="font-weight:600">0</div></div>
-          <div class="stat"><div class="muted">Joined</div><div id="createdAt" style="font-weight:600">-</div></div>
-          <div class="stat"><div class="muted">Profile</div><div style="margin-top:6px"><a id="profileLink" style="color:var(--accent)" target="_blank">Open</a></div></div>
-        </div>
-        <div style="margin-top:14px;padding:12px;border-radius:8px;background:#000;border:1px solid rgba(255,221,0,0.25)">
-          <div style="font-weight:600;color:var(--accent)">Avatar Info</div>
-          <div style="margin-top:8px;display:flex;gap:12px;flex-wrap:wrap">
-            <div class="muted">URL</div>
-            <div class="mono" id="imgUrl" style="max-width:60%"></div>
-          </div>
-          <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">
-            <div class="muted">Format</div><div id="imgType"></div>
-            <div class="muted" style="margin-left:12px">Dimensions</div><div id="imgDims"></div>
-            <div class="muted" style="margin-left:12px">File size</div><div id="imgSize"></div>
-          </div>
-        </div>
-      </div>
+  <!-- Results -->
+  <div id="result" class="card mt-12 hidden">
+    <h3 id="name">Name</h3>
+    <img id="avatarImg" src="" alt="Avatar">
+    <div class="info">
+      <p><span class="highlight">👤 Username:</span> <span id="login"></span></p>
+      <p><span class="highlight">📜 Bio:</span> <span id="bio"></span></p>
+      <p><span class="highlight">📦 Public Repos:</span> <span id="repos"></span></p>
+      <p><span class="highlight">👥 Followers:</span> <span id="followers"></span> | 
+         <span class="highlight">Following:</span> <span id="following"></span></p>
+      <p><span class="highlight">📅 Joined:</span> <span id="createdAt"></span></p>
+      <p><span class="highlight">🔗 Profile:</span> 
+        <a id="profileLink" href="#" target="_blank" class="text-yellow-400 underline">Open on GitHub</a>
+      </p>
     </div>
   </div>
-</div>
+</section>
 
-<footer>© 2025 <span>The Rebel Squad</span> | Powered by GitHub API</footer>
+<!-- Footer -->
+<footer class="bg-black py-6 text-center border-t border-yellow-500">
+  <p class="text-gray-500 text-sm">© 2025 The Rebel Squad - All Rights Reserved.</p>
+</footer>
 
 <script>
-  function parseUsername(value) {
-    value = (value || '').trim();
-    if (!value) return null;
-    try {
-      const u = new URL(value);
-      if (u.hostname.includes('github.com')) {
-        const parts = u.pathname.split('/').filter(Boolean);
-        return parts[0] || null;
-      }
-    } catch { return value.replace(/^@/,'').trim() || null; }
-    return null;
+function parseUsername(value) {
+  value = (value || '').trim();
+  if (!value) return null;
+  try {
+    const u = new URL(value);
+    if (u.hostname.includes('github.com')) {
+      const parts = u.pathname.split('/').filter(Boolean);
+      return parts[0] || null;
+    }
+  } catch { return value.replace(/^@/,'').trim() || null; }
+  return null;
+}
+
+document.getElementById('fetchForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const input = document.getElementById('inputUser').value;
+  const username = parseUsername(input);
+  if (!username) return alert('Please enter a valid GitHub username.');
+
+  try {
+    const res = await fetch('https://api.github.com/users/' + encodeURIComponent(username));
+    if (!res.ok) throw new Error('User not found');
+    const user = await res.json();
+
+    document.getElementById('name').textContent = user.name || user.login || '';
+    document.getElementById('login').textContent = '@' + (user.login || '');
+    document.getElementById('bio').textContent = user.bio || 'No bio available';
+    document.getElementById('repos').textContent = user.public_repos || 0;
+    document.getElementById('followers').textContent = user.followers || 0;
+    document.getElementById('following').textContent = user.following || 0;
+    document.getElementById('createdAt').textContent = user.created_at ? new Date(user.created_at).toLocaleDateString() : '-';
+    document.getElementById('profileLink').href = user.html_url;
+    document.getElementById('avatarImg').src = user.avatar_url;
+
+    document.getElementById('result').classList.remove('hidden');
+  } catch (err) {
+    alert(err.message);
   }
-  function humanFileSize(bytes) {
-    if (!bytes) return '0 B';
-    const thresh = 1024, units = ['KB','MB','GB'];
-    let u=-1; do{bytes/=thresh;++u;}while(bytes>=thresh&&u<units.length-1);
-    return bytes.toFixed(2)+' '+units[u];
-  }
-  function showMessage(msg,kind=''){ 
-    const m=document.getElementById('messages');m.innerHTML='';
-    if(!msg) return;
-    const d=document.createElement('div');d.textContent=msg;
-    if(kind==='error') d.className='error';
-    if(kind==='success') d.className='success';
-    m.appendChild(d);
-  }
-
-  document.getElementById('fetchForm').addEventListener('submit',async e=>{
-    e.preventDefault();
-    showMessage('Fetching...');
-    const input=document.getElementById('inputUser').value;
-    const token=document.getElementById('token').value.trim();
-    const username=parseUsername(input);
-    if(!username){showMessage('Please enter a valid GitHub username.','error');return;}
-
-    try{
-      const headers={'Accept':'application/vnd.github+json'};
-      if(token) headers['Authorization']='Bearer '+token;
-
-      const userResp=await fetch('https://api.github.com/users/'+encodeURIComponent(username),{headers});
-      if(userResp.status===404) throw new Error('User not found');
-      if(!userResp.ok) throw new Error('GitHub API error: '+userResp.status);
-      const user=await userResp.json();
-
-      document.getElementById('name').textContent=user.name||user.login||'';
-      document.getElementById('login').textContent='@'+(user.login||'');
-      document.getElementById('bio').textContent=user.bio||'';
-      document.getElementById('repos').textContent=user.public_repos||0;
-      document.getElementById('followers').textContent=user.followers||0;
-      document.getElementById('following').textContent=user.following||0;
-      document.getElementById('profileLink').href=user.html_url;
-      document.getElementById('createdAt').textContent=user.created_at?new Date(user.created_at).toLocaleDateString():'-';
-
-      if(user.avatar_url){
-        const avatarResp=await fetch(user.avatar_url);const blob=await avatarResp.blob();
-        const size=blob.size;const type=blob.type||'unknown';
-        const objectURL=URL.createObjectURL(blob);
-        const img=new Image();
-        const dims=await new Promise((res,rej)=>{img.onload=()=>{res({w:img.naturalWidth,h:img.naturalHeight});URL.revokeObjectURL(objectURL)};img.onerror=()=>{rej(new Error('Load fail'));URL.revokeObjectURL(objectURL)};img.src=objectURL;});
-        document.getElementById('avatarImg').src=user.avatar_url;
-        document.getElementById('imgUrl').textContent=user.avatar_url;
-        document.getElementById('imgType').textContent=type;
-        document.getElementById('imgDims').textContent=dims.w+' × '+dims.h+' px';
-        document.getElementById('imgSize').textContent=humanFileSize(size);
-        document.getElementById('result').style.display='grid';
-        showMessage('Fetched successfully ✅','success');
-      }
-    }catch(err){showMessage(err.message,'error');document.getElementById('result').style.display='none';}
-  });
+});
 </script>
+
 </body>
 </html>
